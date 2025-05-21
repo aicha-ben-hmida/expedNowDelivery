@@ -1,14 +1,15 @@
-package com.example.demo.Model;
+package com.example.demo.ModelDTO;
 
 
-import com.example.demo.Domain.FragiliteColis;
+import com.example.demo.ModelDomain.FragiliteColis;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-
+@Data
 public class LivraisonDTO {
 
      private long id;

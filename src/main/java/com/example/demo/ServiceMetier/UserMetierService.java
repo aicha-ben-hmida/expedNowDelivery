@@ -1,8 +1,8 @@
 package com.example.demo.ServiceMetier;
 
 
-import com.example.demo.Domain.User;
-import com.example.demo.Model.UserDTO;
+import com.example.demo.ModelDTO.UserDTO;
+import com.example.demo.ModelDomain.User;
 
 import java.util.List;
 
@@ -14,5 +14,5 @@ public interface UserMetierService {
     List<User> getAllUserByRole();
     void desactiveUser(Long id);
     void activateUser(Long id) ;
-    User putUser(Long id, User user);
+    User updateUser(Long id, User updatedUser);
 }

@@ -1,4 +1,4 @@
-package com.example.demo.Domain;
+package com.example.demo.ModelDomain;
 
 public enum DemandeLivraisonStatus {
 

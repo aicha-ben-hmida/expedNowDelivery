@@ -1,7 +1,7 @@
-package com.example.demo.Domain;
+package com.example.demo.ModelDomain;
 
 
-public enum LivreurStatus {
+public enum UserStatus {
     En_ATTENTE,
     DISPONIBLE,
     EN_LIVRAISON,

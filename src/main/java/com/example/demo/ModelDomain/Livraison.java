@@ -1,4 +1,4 @@
-package com.example.demo.Domain;
+package com.example.demo.ModelDomain;
 
 
 
@@ -11,8 +11,9 @@ import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import java.time.LocalDate;
-import com.example.demo.Domain.DemandeLivraison;
-import com.example.demo.Domain.LivraisonStatus;
+
+import com.example.demo.ModelDomain.DemandeLivraison;
+import com.example.demo.ModelDomain.LivraisonStatus;
 
 
 @Entity

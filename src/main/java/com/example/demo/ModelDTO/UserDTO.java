@@ -1,13 +1,15 @@
-package com.example.demo.Model;
+package com.example.demo.ModelDTO;
 
-import com.example.demo.Domain.User;
-import com.example.demo.Domain.UserRole;
-import com.example.demo.mapper.UserMapper;
+import com.example.demo.ModelDomain.User;
+import com.example.demo.ModelDomain.UserRole;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Data
 public class UserDTO{
  private String firstName;
  private String lastName;

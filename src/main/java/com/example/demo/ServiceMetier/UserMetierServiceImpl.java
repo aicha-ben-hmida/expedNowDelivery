@@ -9,11 +9,12 @@ import java.lang.RuntimeException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.poc.domain.User;
-import com.example.poc.domain.UserRole;
-import com.example.poc.repository.UserRepository;
-import com.example.poc.model.UserDTO;
-import com.example.poc.mapper.UserMapper;
+import com.example.demo.ModelDomain.User;
+import com.example.demo.ModelDomain.UserRole;
+import com.example.demo.repository.UserRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -26,22 +27,17 @@ public class UserMetierServiceImpl  implements UserMetierService{
 
 private final UserRepository userRepository ;
 private final PasswordEncoder passwordEncoder;
-private final UserDTO userDTO;
-private final UserMapper userMapper;
-private final User user;
 
-public UserMetierServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder, UserDTO userDTO, UserMapper userMapper,User user) {
+public UserMetierServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
 
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
-    this.userDTO = userDTO;
-    this.userMapper = userMapper;
-    this.user=user;
+    
 
 }
 
 public User saveUser(User user){
-    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
     return userRepository.save(user);
     
 }
@@ -54,6 +50,11 @@ public User getUserById(Long id) {
 
 public List<User> getAllUserByRole(){
     return userRepository.findByRoleNot(UserRole.SUPER_ADMIN);
+   }
+
+   public List<User>getAllLivreur(){
+
+    return userRepository.findAllByRoleIn(List.of(UserRole.LIVREUR_PERMANENT,UserRole.LIVREUR_OCCASIONNEL));
    }
 
 public void desactiveUser(Long id){
@@ -76,27 +77,21 @@ public void activateUser(Long id) {
     userRepository.save(user);
 }
 
- public User putUser(Long id, User user){
+ public User updateUser(Long id, User updatedUser) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'ID : " + id));
 
-     User userExisting = getUserById(id);
-     userExisting.setUsername(user.getUsername());
-     userExisting.setFirstName(user.getFirstName());
-     userExisting.setLastName(user.getLastName());
-     userExisting.setNumTel(user.getNumTel());
-     userExisting.setAddress(user.getAddress());
-     userExisting.setCin(user.getCin());
-     userExisting.setEmail(user.getEmail());
-     userExisting.setRole(user.getRole());
-    
-    if (user.getPassword() != null && !user.getPassword().isEmpty()){
-        userExisting.setPassword(user.getPassword());
+        // Mise à jour des champs
+        existingUser.setUsername(updatedUser.getUsername());
+        existingUser.setPassword(updatedUser.getPassword()); // encoder si nécessaire
+        existingUser.setFullName(updatedUser.getFullName());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPhoneNumber(updatedUser.getPhoneNumber());
+        existingUser.setRole(updatedUser.getRole());
+        existingUser.setActive(updatedUser.isActive());
+
+        return userRepository.save(existingUser);
     }
-
-      return  saveUser(userExisting);  // Sauvegarde de l'utilisateur mis à jour
-
-    }
- 
-
 
 
 /**
@@ -113,27 +108,7 @@ public PasswordEncoder getPasswordEncoder() {
     return passwordEncoder;
 }
 
-/**
- * @return the userDTO
- */
-public UserDTO getUserDTO() {
-    return userDTO;
-}
 
-/**
- * @return the userMapper
- */
-public UserMapper getUserMapper() {
-    return userMapper;
-}
-
-/**
- * @return the user
- */
-public User getUser() {
-    return user;
-}
- 
 
 
 

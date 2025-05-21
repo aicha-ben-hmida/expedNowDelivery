@@ -1,15 +1,17 @@
-package com.example.demo.Domain;
+package com.example.demo.ModelDomain;
 
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+
 import java.util.List;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.CascadeType;
-import com.example.poc.domain.Livreur;
-import com.example.poc.domain.Admin;
+import com.example.demo.ModelDomain.User;
 
 @Entity
 public class Vehicule {
@@ -19,6 +21,7 @@ public class Vehicule {
 
      private long id;
 
-     @OneToMany(mappedBy= "vehicule" , cascade = CascadeType.ALL)
-     private List<Livreur> livreur;
+     @OneToOne
+     @JoinColumn(name = "user_id" )
+     private User user;
 }

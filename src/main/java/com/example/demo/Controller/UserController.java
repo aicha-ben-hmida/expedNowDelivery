@@ -1,9 +1,9 @@
 package com.example.demo.Controller;
 
-import com.example.demo.serviceApplicatif.UserServiceApplicatif;
-import com.example.demo.domain.UserRole;
-import com.example.demo.model.UserDTO;
-import com.example.demo.domain.User;
+import com.example.demo.ServiceApplicatif.UserServiceApp;
+import com.example.demo.ModelDomain.UserRole;
+import com.example.demo.ModelDTO.UserDTO;
+import com.example.demo.ModelDomain.User;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +20,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @RequestMapping("/")
 public class UserController {
 
-    private final UserServiceApplicatif userServiceApplicatif;
+    private final UserServiceApp userServiceApplicatif;
 
-        public UserController(UserServiceApplicatif userServiceApplicatif){
+        public UserController(UserServiceApp userServiceApplicatif){
         this.userServiceApplicatif = userServiceApplicatif;
         }
 

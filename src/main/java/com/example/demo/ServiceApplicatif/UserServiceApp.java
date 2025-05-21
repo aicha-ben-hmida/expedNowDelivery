@@ -1,12 +1,11 @@
 package com.example.demo.ServiceApplicatif;
 
 
-import com.example.demo.Model.UserDTO;
+import com.example.demo.ModelDomain.User;
+import com.example.demo.ModelDomain.UserRole;
 import com.example.demo.Mapper.UserMapper;
-import com.example.demo.Domain.User;
-import com.example.demo.Domain.UserRole;
-import com.example.demo.Servicemetier.UserMetierService;
-import com.example.demo.servicemetier.UserMetierServiceImpl;
+import com.example.demo.ModelDTO.UserDTO;
+import com.example.demo.ServiceMetier.UserMetierService;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class UserServiceApp {
 
     final private UserMapper userMapper;
     final private UserMetierService userMetierService;
-   final private PasswordEncoder passwordEncoder;
+    final private PasswordEncoder passwordEncoder;
 
 
     public UserServiceApp(UserMapper userMapper, UserMetierService userMetierService, PasswordEncoder passwordEncoder){
@@ -72,7 +71,7 @@ public void activateUser(Long id) {
 public User putUser(Long id, UserDTO userDTO){
     
       User user = userMapper.toEntity(userDTO);
-      User userupdated = userMetierService.putUser(id, user);
+      User userupdated = userMetierService.updateUser(id, user);
       return userupdated;
 }
 }

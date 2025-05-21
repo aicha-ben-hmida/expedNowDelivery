@@ -2,8 +2,8 @@ package com.example.demo.Mapper;
 
 import org.springframework.stereotype.Component;
 
-import com.example.poc.model.UserDTO;
-import com.example.poc.domain.User;
+import com.example.demo.ModelDTO.UserDTO;
+import com.example.demo.ModelDomain.User;
 
 import java.util.List;
 

@@ -1,9 +1,10 @@
-package com.example.demo.Domain;
+package com.example.demo.ModelDomain;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import com.example.demo.Domain.DemandeLivraisonStatus;
+import com.example.demo.ModelDomain.DemandeLivraisonStatus;
+import com.example.demo.ModelDomain.Livraison;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,21 +16,25 @@ import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.example.demo.Domain.Livraison;
+import com.example.demo.ModelDomain.DemandeLivraisonStatus;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class DemandeLivraison {
     @Id
     @GeneratedValue
     private Long id;
 
+    private DemandeLivraisonStatus status;
+
     private LocalDate datecreationdemande;
 
-    public DemandeLivraison(LocalDate datecreationdemande){
+    public DemandeLivraison(LocalDate datecreationdemande, DemandeLivraisonStatus status){
         this.datecreationdemande = datecreationdemande;
+        this.status = status;
     }
     @ManyToOne
     @JoinColumn(name = "user_id" , nullable = false)

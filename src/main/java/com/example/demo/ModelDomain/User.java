@@ -1,12 +1,18 @@
-package com.example.demo.Domain;
+package com.example.demo.ModelDomain;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import com.example.demo.Domain.UserRole;
-import com.example.demo.Domain.demandeLivraison;
+import lombok.Setter;
 
 @Entity
 @Table(name = "users")
@@ -36,15 +42,26 @@ public class User {
     @Column(nullable = false)
     private UserRole role;  
 
-     public User(String username, String password, String fullName, String email, String phoneNumber, UserRole role) {
+    private boolean active = true;
+
+     public User(String username, String password, String fullName, String email, String phoneNumber, UserRole role,boolean active) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.role = role;
+        this.active =active;
     }
 
   @OneToMany(mappedBy = "requester")
   private List<DemandeLivraison> demandeLivraison;
+
+  @OneToMany(mappedBy = "user")
+  private Notifications notifications;
+
+  @OneToOne(mappedBy = "user")
+  private Vehicule vehicule;
+  
+
 }
