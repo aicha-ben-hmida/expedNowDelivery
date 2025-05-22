@@ -9,8 +9,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.Date;
 
 import com.example.demo.ModelDomain.DemandeLivraison;
 import com.example.demo.ModelDomain.LivraisonStatus;
@@ -19,6 +21,7 @@ import com.example.demo.ModelDomain.LivraisonStatus;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 
 public class Livraison {
 
@@ -28,18 +31,18 @@ public class Livraison {
 
        private LivraisonStatus statut;
 
-       private LocalDate dateLivraison;
-
-
-       public Livraison(LivraisonStatus statut, LocalDate dateLivraison) 
-       {
-              this.statut= statut;
-              this.dateLivraison = dateLivraison;
-       }
+       private Date dateLivraison;
 
 @ManyToOne
 @JoinColumn(name = "livraison")
 private DemandeLivraison demandeLivraison;
+
+
+       public Livraison(LivraisonStatus statut, Date dateLivraison) 
+       {
+              this.statut= statut;
+              this.dateLivraison = dateLivraison;
+       }
 
 
 

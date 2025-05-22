@@ -24,6 +24,7 @@ import com.example.demo.ModelDomain.DemandeLivraisonStatus;
 @NoArgsConstructor
 
 public class DemandeLivraison {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -31,11 +32,7 @@ public class DemandeLivraison {
     private DemandeLivraisonStatus status;
 
     private LocalDate datecreationdemande;
-
-    public DemandeLivraison(LocalDate datecreationdemande, DemandeLivraisonStatus status){
-        this.datecreationdemande = datecreationdemande;
-        this.status = status;
-    }
+    
     @ManyToOne
     @JoinColumn(name = "user_id" , nullable = false)
     private User requester;
@@ -47,5 +44,10 @@ public class DemandeLivraison {
        
     @OneToMany(mappedBy = "livraison")
     private List<Livraison> livraison;
+
+    public DemandeLivraison(LocalDate datecreationdemande, DemandeLivraisonStatus status){
+        this.datecreationdemande = datecreationdemande;
+        this.status = status;
+    }
 
 }
