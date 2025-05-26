@@ -1,29 +1,19 @@
 package com.example.demo.ModelDTO;
 
+import java.util.Date;
 
-import com.example.demo.ModelDomain.FragiliteColis;
+import com.example.demo.ModelDomain.LivraisonStatus;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
 @Data
 public class LivraisonDTO {
 
-     private long id;
-     private String description;
-     private String destinataire;
-     private FragiliteColis fragiliteColis;
+    private Long id;
+    private LivraisonStatus statut;
+    private Date dateLivraison;
 
-
-public LivraisonDTO(long id , String description, String destinataire, FragiliteColis fragiliteColis){
-    this.id=id;
-    this.description=description;
-    this.destinataire=destinataire;
-    this.fragiliteColis=fragiliteColis;
-}
-
-
+    private Long demandeLivraisonId;  
+    private Long livreurId;
+    private String livreurNom;      
 }

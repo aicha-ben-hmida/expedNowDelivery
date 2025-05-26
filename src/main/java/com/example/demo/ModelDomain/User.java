@@ -4,6 +4,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,6 +15,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.example.demo.ModelDomain.Livraison;
 
 @Entity
 @Table(name = "users")
@@ -34,17 +37,30 @@ public class User {
     @Column(nullable = false)
     private String fullName;
 
+    @Column(nullable =  false)
+    private String adress;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     private String phoneNumber;
 
-    @Column(nullable = false)
+   @Enumerated(EnumType.STRING)
     private UserRole role;  
+
+  @OneToMany(mappedBy = "user")
+  private Notifications notifications;
+
+  @OneToOne(mappedBy = "user")
+  private Vehicule vehicule;
+
+  @OneToMany(mappedBy = "Livreur")
+  private Livraison livraison;
+  
 
     private boolean active = true;
 
-     public User(String username, String password, String fullName, String email, String phoneNumber, UserRole role,boolean active) {
+     public User(String username, String address,String password, String fullName, String email, String phoneNumber, UserRole role,boolean active,Notifications notifications,Vehicule vehicule,Livraison livraison) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
@@ -52,16 +68,13 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.active =active;
+        this.notifications = notifications;
+        this.vehicule =vehicule;
+        this.livraison =livraison;
+        this.adress = adress;
     }
 
-  @OneToMany(mappedBy = "requester")
-  private List<DemandeLivraison> demandeLivraison;
 
-  @OneToMany(mappedBy = "user")
-  private Notifications notifications;
-
-  @OneToOne(mappedBy = "user")
-  private Vehicule vehicule;
   
 
 }

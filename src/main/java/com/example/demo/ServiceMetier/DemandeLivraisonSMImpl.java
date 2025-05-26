@@ -22,21 +22,31 @@ public class DemandeLivraisonSMImpl implements DemandeLivraisonServiceMetier{
         private LivraisonRepository livraisonRepository;
 
 
-   public DemandeLivraisonSMImpl(DemandeLivraisonRepository demandeLivraisonRepository, LivraisonRepository livraisonRepository){
-    this.demandeLivraisonRepository = demandeLivraisonRepository;
-    this.livraisonRepository = livraisonRepository;
-   }
+   public DemandeLivraisonSMImpl(DemandeLivraisonRepository demandeLivraisonRepository, LivraisonRepository livraisonRepository)
+          {
+           
+            this.demandeLivraisonRepository = demandeLivraisonRepository;
+            this.livraisonRepository = livraisonRepository;
+            
+          }
 
-     public DemandeLivraison saveDemandeLivraison(DemandeLivraison demande){
-      return demandeLivraisonRepository.save(demande);
-     }
+    public DemandeLivraison saveDemandeLivraison(DemandeLivraison demande)
+          {
+          return demandeLivraisonRepository.save(demande);
+          }
+  
+     public Livraison saveLivraison(Livraison livraison)
+          {
+            return livraisonRepository.save(livraison);
+          }
+          
      
-     public DemandeLivraison update(Long id, DemandeLivraison updatedDemande) {
-    return demandeLivraisonRepository.findById(id)
+     public DemandeLivraison update(Long id, DemandeLivraison updatedDemande) {  
+
+        return demandeLivraisonRepository.findById(id)
         .map(existing -> {
             existing.setStatus(updatedDemande.getStatus());
             existing.setDatecreationdemande(updatedDemande.getDatecreationdemande());
-            existing.setRequester(updatedDemande.getRequester());
             existing.setColis(updatedDemande.getColis());
             existing.setLivraison(updatedDemande.getLivraison());
             return demandeLivraisonRepository.save(existing);
@@ -44,89 +54,147 @@ public class DemandeLivraisonSMImpl implements DemandeLivraisonServiceMetier{
         .orElseThrow(() -> new RuntimeException("Demande de livraison non trouvée avec l'ID : " + id));
 }
         
-      public void verifierDemandeEnAttente(DemandeLivraison demandeLivraison, DemandeLivraisonStatus demandeLivraisonStatus,User user, UserRole userRole){
-        if(!demandeLivraison.getStatus().equals(demandeLivraisonStatus.En_ATTENTE)){
-          throw new IllegalStateException("la demande n est plus en attente");
-        } 
-       
+           
 
-
-      public void annulerDemandeParClient(DemandeLivraison demandeLivraison, User user, UserRole userRole) {
-             
-          if (demandeLivraison == null || user == null || userRole == null ) {
+      public void annulerDemandeParClient(DemandeLivraison demandeLivraison, User user) {
+             //if rien ne se transmet dans la requete
+          if (demandeLivraison == null || user == null  ) {
                 throw new IllegalArgumentException("des arguments sont null verifier");
               }
 
-              if (Set.of(UserRole.CLIENT_ENTREPRiSE, UserRole.CLIENT_PROFESSIONNEL).contains(userRole)) {
-                  if (Set.of(DemandeLivraisonStatus.En_ATTENTE, DemandeLivraisonStatus.EN_COURS).contains(demandeLivraison.getStatus())) {
-                      demandeLivraison.setStatus(DemandeLivraisonStatus.ANNULER);
+              if (!Set.of(UserRole.CLIENT_ENTREPRiSE, UserRole.CLIENT_PROFESSIONNEL).contains(user.getRole())) {
+                  throw new RuntimeException("invalid role");
+              }
+
+              if (!Set.of(DemandeLivraisonStatus.En_ATTENTE, DemandeLivraisonStatus.TRAITER).contains(demandeLivraison.getStatus())) {
+
+                     throw new RuntimeException("invalid demande status");
                   }
-              }
 
-              if (!Set.of(UserRole.CLIENT_ENTREPRiSE, UserRole.CLIENT_PROFESSIONNEL).contains(userRole.)) {
-                  throw new RuntimeException("role");
-              }
+                  if(demandeLivraison.getClient().getId().equals(user.getId())){
 
-              if (!Set.of(DemandeLivraisonStatus.En_ATTENTE, DemandeLivraisonStatus.EN_COURS).contains(demandeLivraison.getStatus())) {
-                     throw new RuntimeException("status");
+                    throw new RuntimeException("vous n'avez pas le droit d'annuler une demande");
                   }
 
                   demandeLivraison.setStatus(DemandeLivraisonStatus.ANNULER);
+                  saveDemandeLivraison(demandeLivraison);
 
             }      
       
 
-         public void AcceptationParlivreur(User user,UserRole userRole, DemandeLivraison demandeLivraison){
-                   
-                   if (userRole == UserRole.LIVREUR_PERMANENT || userRole == UserRole.LIVREUR_OCCASIONNEL){
-                        user.setRole(userRole);
-                        demandeLivraison.setRequester(user);
-                   }else {
-                    throw new IllegalArgumentException("Rôle non autorisé pour accepter une demande.");
+         public void AcceptationParlivreur(User user, DemandeLivraison demandeLivraison){
+
+                   if (demandeLivraison == null  || user == null  )
+                   {
+                      throw new IllegalArgumentException("des arguments sont null verifier");
                    }
-                   verifierDemandeEnAttente(demandeLivraison, DemandeLivraisonStatus.En_ATTENTE,  user, userRole);
-                   demandeLivraison.setStatus(DemandeLivraisonStatus.EN_COURS);
 
-                   
-             
-           }
-      
-      public void creationLivraison(DemandeLivraison demandeLivraison, User user, UserRole userRole){
+                    if (!Set.of(UserRole.LIVREUR_PERMANENT, UserRole.LIVREUR_OCCASIONNEL).contains(user.getRole())) {
 
-                   AcceptationParlivreur(user, userRole, demandeLivraison);  
-                   Livraison livraison = new Livraison(LivraisonStatus.CREER, new Date()) ;
-                   demandeLivraison.setStatus(DemandeLivraisonStatus.EN_COURS);      
-      }
-
-
-     
-
-      public void annulerLivraisonParClient(Livraison livraison,User user, UserRole userRole, DemandeLivraison demandeLivraison){
-          
-        if(livraison == null || user ==  null || userRole == null)  {
-            throw new IllegalArgumentException("des arguments sont verifiers null");
-        }
-            if (!Set.of(UserRole.CLIENT_ENTREPRiSE, UserRole.CLIENT_PROFESSIONNEL).contains(user.getRole())) {
-                  if (!Set.of(LivraisonStatus.CREER, LivraisonStatus.EN_COURS).contains(livraison.getStatut())) {
-                     livraison.setStatut(LivraisonStatus.ANNULER);
-                     demandeLivraison.setStatus(DemandeLivraisonStatus.ANNULER);
+                      throw new RuntimeException("Rôle non autorisé pour accepter une demande");
+                    
+                     
+                      }
+                    if (demandeLivraison.getStatus() != DemandeLivraisonStatus.En_ATTENTE)
+                    
+                    {
+                       throw new RuntimeException("invalid demande status ");
                     }
-                    } else {
-                throw new IllegalStateException("La demande ne peut pas être annulée à ce stade.");
-        }
+                        Livraison livraison = new Livraison(LivraisonStatus.CREER, new Date(),demandeLivraison,user) ;
+                        saveLivraison(livraison);
+                        demandeLivraison.setStatus(DemandeLivraisonStatus.TRAITER);    
+                        saveDemandeLivraison(demandeLivraison);
 
-               }}
-
-     
-              
-              
-
-               
-              
-              
-      
+                    }
     
 
+      public void annulerLivraisonParClient(Livraison livraison,User user,DemandeLivraison demandeLivraison){
+          
+        if(livraison == null || user ==  null ) 
+         {
+            throw new IllegalArgumentException("des arguments sont verifiers null");
+         }
+
+            if (!Set.of(UserRole.CLIENT_ENTREPRiSE, UserRole.CLIENT_PROFESSIONNEL).contains(user.getRole()))
+             {
+               throw new RuntimeException("Rôle non autorisé pour annuler livraison");
+             }
+                  if (!Set.of(LivraisonStatus.CREER, LivraisonStatus.EN_COURS).contains(livraison.getStatut())) 
+                  {
+                    throw new RuntimeException("status non autorise");
+                  }
+
+                   if (!demandeLivraison.getClient().getId().equals(user.getId()))
+          
+                    { 
+                      throw new RuntimeException("Ce livreur n'est pas assigné à cette livraison.");
+                    }
+                     livraison.setStatut(LivraisonStatus.ANNULER);
+                     livraisonRepository.save(livraison);
+                     demandeLivraison.setStatus(DemandeLivraisonStatus.ANNULER);
+                     demandeLivraisonRepository.save(demandeLivraison);
+                    }
+
+
+      public void CommencerLivraison(Livraison livraison, User user){
+        
+        if (livraison == null || user == null) 
+          {
+            throw new IllegalArgumentException("Arguments manquants");
+          }
+        
+        if (!Set.of(UserRole.LIVREUR_PERMANENT,UserRole.LIVREUR_OCCASIONNEL).contains(user.getRole()))
+         {
+            throw new IllegalArgumentException("Rôle non autorisé pour commencer livraison");
+          }
+           
+          if (!livraison.getLivreur().getId().equals(user.getId()))
+          
+          { 
+            throw new RuntimeException("Ce livreur n'est pas assigné à cette livraison.");
+          }
+
+         if(livraison.getStatut() != LivraisonStatus.CREER)
+          {
+            throw new IllegalArgumentException("La livraison doit être au statut 'CREEE' pour être commencée");
+          }
+            livraison.setStatut(LivraisonStatus.EN_COURS);
+            livraisonRepository.save(livraison);
+      }
+
+      public void livraisonAchever(Livraison livraison , DemandeLivraison demandeLivraison, User user){
+        if (livraison == null || user == null) 
+          {
+            throw new IllegalArgumentException("Arguments manquants");
+          }
+        
+        if (!Set.of(UserRole.LIVREUR_PERMANENT,UserRole.LIVREUR_OCCASIONNEL).contains(user.getRole()))
+         {
+            throw new IllegalArgumentException("Rôle non autorisé pour commencer livraison");
+          }
+           
+          if (!livraison.getLivreur().getId().equals(user.getId()))
+          
+          { 
+            throw new RuntimeException("Ce livreur n'est pas assigné à cette livraison.");
+          }
+          livraison.setStatut(LivraisonStatus.SUCCES);
+          demandeLivraison.setStatus(DemandeLivraisonStatus.SUCCES);
+          livraisonRepository.save(livraison);
+          demandeLivraisonRepository.save(demandeLivraison);
+
+      }
+
+     
+
+                
+
+              
+              
+              
+        
+    
+ }
 
     
 

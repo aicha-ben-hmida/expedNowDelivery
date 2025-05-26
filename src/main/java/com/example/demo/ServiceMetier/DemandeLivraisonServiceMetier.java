@@ -9,11 +9,12 @@ import com.example.demo.ModelDomain.UserRole;
 
 public interface DemandeLivraisonServiceMetier {
 
-
-    void verifierDemandeEnAttente(DemandeLivraison demandeLivraison,DemandeLivraisonStatus demandeLivraisonStatus, User user,UserRole userRole);
-    void annulerDemandeParClient(DemandeLivraison demandeLivraison, User user, UserRole userRole);
-    void creationLivraison(DemandeLivraison demandeLivraison, User user, UserRole userRole);
-    void annulerLivraisonParClient(Livraison livraison,LivraisonStatus livraisonStatus,User user); 
-    void AcceptationParlivreur(User user,UserRole userRole, DemandeLivraison demandeLivraison, DemandeLivraisonStatus demandeLivraisonStatus, Livraison livraison, LivraisonStatus livraisonStatus);
-     void annulerLivraisonParClient(Livraison livraison,User user, UserRole userRole, DemandeLivraison demandeLivraison);
+    Livraison saveLivraison(Livraison livraison);
+    DemandeLivraison saveDemandeLivraison(DemandeLivraison demande);
+    DemandeLivraison update(Long id, DemandeLivraison updatedDemande);
+    void annulerDemandeParClient(DemandeLivraison demandeLivraison, User user) ;
+    void AcceptationParlivreur(User user, DemandeLivraison demandeLivraison);
+    void annulerLivraisonParClient(Livraison livraison,User user,DemandeLivraison demandeLivraison);
+    void CommencerLivraison(Livraison livraison, User user)  ; 
+    void livraisonAchever(Livraison livraison , DemandeLivraison demandeLivraison, User user);
 }

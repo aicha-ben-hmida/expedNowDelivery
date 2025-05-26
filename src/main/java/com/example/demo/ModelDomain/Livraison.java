@@ -33,18 +33,22 @@ public class Livraison {
 
        private Date dateLivraison;
 
-@ManyToOne
-@JoinColumn(name = "livraison")
-private DemandeLivraison demandeLivraison;
+   @ManyToOne
+   @JoinColumn(name = "livraison")
+   private DemandeLivraison demandeLivraison;
+
+   @ManyToOne
+   @JoinColumn(name ="user_id")
+   private User livreur;
 
 
-       public Livraison(LivraisonStatus statut, Date dateLivraison) 
-       {
-              this.statut= statut;
-              this.dateLivraison = dateLivraison;
-       }
-
-
+   public Livraison(LivraisonStatus statut, Date dateLivraison, DemandeLivraison demandeLivraison, User livreur)
+    {
+        this.statut = statut;
+        this.dateLivraison = dateLivraison;
+        this.demandeLivraison = demandeLivraison;
+        this.livreur = livreur;
+   }
 
 
 }
