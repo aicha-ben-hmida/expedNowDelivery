@@ -28,8 +28,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-increment id
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
+  
 
     @Column(nullable = false)
     private String password;
@@ -56,12 +55,17 @@ public class User {
 
   @OneToMany(mappedBy = "Livreur")
   private Livraison livraison;
+
+  @OneToMany(mappedBy = "client")
+  private List<DemandeLivraison> demandesClient;
+
+ @OneToMany(mappedBy = "livreur")
+ private List<Livraison> livraisonsLivreur;
   
 
     private boolean active = true;
 
-     public User(String username, String address,String password, String fullName, String email, String phoneNumber, UserRole role,boolean active,Notifications notifications,Vehicule vehicule,Livraison livraison) {
-        this.username = username;
+     public User(String address,String password, String fullName, String email, String phoneNumber,List<DemandeLivraison> demandesClient,List<Livraison> livraisonsLivreur, UserRole role,boolean active,Notifications notifications,Vehicule vehicule,Livraison livraison) {
         this.password = password;
         this.fullName = fullName;
         this.email = email;
@@ -72,6 +76,8 @@ public class User {
         this.vehicule =vehicule;
         this.livraison =livraison;
         this.adress = adress;
+        this.demandesClient=demandesClient;
+        this.livraisonsLivreur = livraisonsLivreur;
     }
 
 

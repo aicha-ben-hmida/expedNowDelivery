@@ -20,13 +20,15 @@ public class DemandeLivraisonSMImpl implements DemandeLivraisonServiceMetier{
 
     private DemandeLivraisonRepository demandeLivraisonRepository;
         private LivraisonRepository livraisonRepository;
+        private UserMetierService userMetierService;
 
 
-   public DemandeLivraisonSMImpl(DemandeLivraisonRepository demandeLivraisonRepository, LivraisonRepository livraisonRepository)
+   public DemandeLivraisonSMImpl(DemandeLivraisonRepository demandeLivraisonRepository, LivraisonRepository livraisonRepository,UserMetierService userMetierService)
           {
            
             this.demandeLivraisonRepository = demandeLivraisonRepository;
             this.livraisonRepository = livraisonRepository;
+            this.userMetierService = userMetierService;
             
           }
 
@@ -56,8 +58,10 @@ public class DemandeLivraisonSMImpl implements DemandeLivraisonServiceMetier{
         
            
 
-      public void annulerDemandeParClient(DemandeLivraison demandeLivraison, User user) {
-             //if rien ne se transmet dans la requete
+      public void annulerDemandeParClient(DemandeLivraison demandeLivraison, Long  userId ) {
+
+        User user= userMetierService.getUserById(userId);
+        
           if (demandeLivraison == null || user == null  ) {
                 throw new IllegalArgumentException("des arguments sont null verifier");
               }
@@ -71,7 +75,7 @@ public class DemandeLivraisonSMImpl implements DemandeLivraisonServiceMetier{
                      throw new RuntimeException("invalid demande status");
                   }
 
-                  if(demandeLivraison.getClient().getId().equals(user.getId())){
+                  if(!demandeLivraison.getClient().getId().equals(user.getId())){
 
                     throw new RuntimeException("vous n'avez pas le droit d'annuler une demande");
                   }

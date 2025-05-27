@@ -33,7 +33,7 @@ public class Livraison {
 
        private Date dateLivraison;
 
-   @ManyToOne
+   @ManyToOne 
    @JoinColumn(name = "livraison")
    private DemandeLivraison demandeLivraison;
 

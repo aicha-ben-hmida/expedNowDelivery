@@ -28,7 +28,6 @@ public class UserController {
 
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     @PostMapping("/admin")
-
     public  ResponseEntity<UserDTO> saveAdmin(@RequestBody UserDTO userDTO){
         
         userDTO.setRole(UserRole.ADMIN);

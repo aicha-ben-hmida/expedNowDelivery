@@ -12,7 +12,7 @@ public interface DemandeLivraisonServiceMetier {
     Livraison saveLivraison(Livraison livraison);
     DemandeLivraison saveDemandeLivraison(DemandeLivraison demande);
     DemandeLivraison update(Long id, DemandeLivraison updatedDemande);
-    void annulerDemandeParClient(DemandeLivraison demandeLivraison, User user) ;
+    void annulerDemandeParClient(DemandeLivraison demandeLivraison, long userId) ;
     void AcceptationParlivreur(User user, DemandeLivraison demandeLivraison);
     void annulerLivraisonParClient(Livraison livraison,User user,DemandeLivraison demandeLivraison);
     void CommencerLivraison(Livraison livraison, User user)  ; 
